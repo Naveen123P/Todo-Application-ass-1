@@ -250,11 +250,91 @@ app.post("/todos/", async (request, response) => {
 // API 5
 
 app.put("/todos/:todoId/", async (request, response) => {
-  switch (key) {
-    case value:
+  const { todoId } = request.params;
+  const { status } = request.body;
+  const { priority } = request.body;
+  const { todo } = request.body;
+  const { category } = request.body;
+  const { dueDate } = request.body;
+  let updateTodoQuery = "";
+  switch (true) {
+    case status !== undefined:
+      updateTodoQuery = `
+        UPDATE
+            todo
+        SET 
+            status ='${status}'
+        WHERE 
+            id = ${todoId};
+        `;
+      const statusUpdate = await db.run(updateTodoQuery);
+      response.send("Status Updated");
+      break;
+    case priority !== undefined:
+      updateTodoQuery = `
+        UPDATE
+            todo
+        SET 
+            priority ='${priority}'
+        WHERE 
+            id = ${todoId};
+        `;
+      const priorityUpdate = await db.run(updateTodoQuery);
+      response.send("Priority Updated");
+      break;
+    case todo !== undefined:
+      updateTodoQuery = `
+        UPDATE
+            todo
+        SET 
+            todo ='${todo}'
+        WHERE 
+            id = ${todoId};
+        `;
+      const todoUpdate = await db.run(updateTodoQuery);
+      response.send("Todo Updated");
+      break;
+    case category !== undefined:
+      updateTodoQuery = `
+        UPDATE
+            todo
+        SET 
+            category ='${category}'
+        WHERE 
+            id = ${todoId};
+        `;
+      const categoryUpdate = await db.run(updateTodoQuery);
+      response.send("Category Updated");
+      break;
+    case dueDate !== undefined:
+      updateTodoQuery = `
+        UPDATE
+            todo
+        SET 
+            due_date ='${dueDate}'
+        WHERE 
+            id = ${todoId};
+        `;
+      const dueDateUpdate = await db.run(updateTodoQuery);
+      response.send("Due Date Updated");
       break;
 
     default:
+      response.status(400);
       break;
   }
+});
+
+// API 6
+
+app.delete("/todos/:todoId/", async (request, response) => {
+  const { todoId } = request.params;
+  const deleteTodoQuery = `
+    DELETE FROM
+        todo
+    WHERE 
+        id = ${todoId};
+    `;
+  const deletedTodo = await db.run(deleteTodoQuery);
+  response.send("Todo Deleted");
 });
